@@ -58,6 +58,7 @@ const walk = async (dir) => {
             fs.copyFileSync(file, file.replace('src', 'dist'));
           }
           console.log('Post Array:', postArray);
+          fs.writeFileSync('dist/index.html', await ejs.renderFile("templates/index.ejs", { postArray, title: "Index" }));
         });
       });
     });
