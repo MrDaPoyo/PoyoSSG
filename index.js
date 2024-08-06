@@ -9,7 +9,7 @@ const postArray = [];
 
 for (let file of post_files) {
   console.log(`Processing ${file}`);
-  postArray.push(mdProcessor.extractMetadata(fs.readFileSync('src/posts/'+file, 'utf8')));
+  postArray.push(JSON.parse(mdProcessor.extractMetadata(fs.readFileSync('src/posts/'+file, 'utf8'))));
 }
 fs.writeFileSync('posts.json', JSON.stringify(postArray));
 
