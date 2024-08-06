@@ -16,7 +16,8 @@ fs.writeFileSync('posts.json', JSON.stringify(postArray));
 async function mergeEjsFiles() {
   const index_html = await ejs.renderFile('src/templates/index.ejs', { postArray: postArray, title: 'Index' });
   fs.writeFileSync('predist/index.html', index_html);
-  fs.cpSync('src/templates/static/index.css', 'predist/index.css');
+  fs.cpSync('src/templates/static/index.css', 'predist/static/index.css');
+  fs.cpSync('src/templates/static/index.css', 'predist/posts/static/index.css');
 };
 
 function checkMDFiles(files) {
@@ -40,6 +41,12 @@ if (process.argv.includes('--server')) {
   const express = require('express');
   const app = express();
   app.use(express.static('predist'));
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'predist/index.html'));
+  });
+  app.get('/post/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'predist/posts/' + req.params.id + '.html'));
+  });
   app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
   });

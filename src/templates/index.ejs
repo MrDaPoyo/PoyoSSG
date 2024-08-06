@@ -3,11 +3,10 @@
 <meta name="description" content="A collection of casual interviews with random people across the world.">
 <div class="container">
     <div class="post-list">
-        <%= postArray %>
         <% for (let post of postArray) { %>
         <div class="post">
             <div class="post-header">
-                <a href="interviews/<%= post.location %>"><h3 class="post-title"><%= post.title %></h3></a>
+                <a href="posts/<%= post.dest %>"><h3 class="post-title"><%= post.title %></h3></a>
                 <p>Authored by <%= post.author %></p>
             </div>
         </div>

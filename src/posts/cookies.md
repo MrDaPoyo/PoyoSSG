@@ -1,4 +1,5 @@
 ---
+dest: cookies.html
 author: Poyo!
 title: Why aren't Cookies free for everyone?
 category: "international"
