@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const mdProcessor = require('./mdProcessor.js');
 const ejs = require('ejs');
+const { output } = require('marked/src/InlineLexer.js');
 
 const finalDir = 'dist';
 
@@ -23,7 +24,12 @@ const walk = async (dir) => {
               results = results.concat(res);
               if (!--togo) resolve(results);
             });
-          } else {
+          } 
+          else if (dir === 'posts') {
+            console.log(outputFilePath);
+            fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), ejs.render('src/templates/post.ejs', { title: 'Hello', content: mdProcessor.readMarkdownFile(file).markdown()}));
+          }
+          else {
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
 
