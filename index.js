@@ -29,7 +29,7 @@ const walk = async (dir) => {
             console.log('dir:', dir);
             fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), ejs.render('src/templates/post.ejs', { title: 'Hello', content: mdProcessor.readMarkdownFile(file).markdown()}));
           }
-          else {
+          else if (file.split('.')[1] == 'md') {
             console.log(dir)
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
@@ -42,6 +42,8 @@ const walk = async (dir) => {
             fs.mkdirSync(outputDir, { recursive: true });
             fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), processed_file);
             if (!--togo) resolve(results);
+          } else {
+            fs.copyFileSync(file, file.replace('src', 'dist'));
           }
         });
       });
