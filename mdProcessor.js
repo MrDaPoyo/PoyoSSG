@@ -11,7 +11,7 @@ const templatePath = path.join(__dirname, 'src/templates/post.ejs');
 function extractMetadata(content) {
     const metadata = {};
     const metadataRegex = /^---\n([\s\S]+?)\n---/;
-    const match = content.match(metadataRegex);
+    const match = typeof content === 'string' ? content.match(metadataRegex) : null;
     if (match) {
         const metadataContent = match[1];
         metadataContent.split('\n').forEach(line => {
@@ -19,7 +19,7 @@ function extractMetadata(content) {
             metadata[key] = value;
         });
     }
-    return metadata;
+    return JSON.stringify(metadata);
 }
 
 
