@@ -15,6 +15,7 @@
     "front-matter": "^3.1.0",
     "highlight.js": "^9.18.1",
     "marked": "^0.8.2",
+    "marked-metadata": "^0.0.6",
     "showdown": "^2.1.0"
   }
 }
