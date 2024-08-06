@@ -33,6 +33,7 @@ const walk = async (dir) => {
           }
           else if (dir === __dirname + '/src/posts') {
             console.log('Copying Post: ', dir);
+            fs.mkdirSync(file.replace('src', 'dist').replace(fileData.base, ''), { recursive: true });
             fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), ejs.render('src/templates/post.ejs', { title: 'Hello', content: mdProcessor.readMarkdownFile(file).markdown() }));
           }
           else if (file.split('.')[1] == 'md') {
