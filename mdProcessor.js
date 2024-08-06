@@ -35,7 +35,7 @@ function processMarkdown(directory) {
         const converted = marked(text);
     
         // Render HTML using EJS template
-        ejs.renderFile(templatePath, { title: path.basename(file, '.md'), content: converted }, (err, str) => {
+        ejs.renderFile(templatePath, { content: converted, metadata: {}, title: file }, (err, str) => {
             if (err) {
                 console.error(`Error rendering file ${file}:`, err);
                 return;
