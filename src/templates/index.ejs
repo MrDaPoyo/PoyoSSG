@@ -1,0 +1,19 @@
+<%- include('header.ejs') %>
+<title>The Poyo Reporter - Index</title>
+<meta name="description" content="A collection of casual interviews with random people across the world.">
+<div class="container">
+    <div class="post-list">
+        <% for (let post of posts) { %>
+        <div class="post">
+            <div class="post-header">
+                <a href="interviews/<%= post.location %>"><h3 class="post-title"><%= post.title %></h3></a>
+                <p>Authored by <%= post.interviewer %></p>
+            </div>
+            <div class="post-content">
+                <p><%= post.subtitle %></p>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+<%- include('footer.ejs') %>
