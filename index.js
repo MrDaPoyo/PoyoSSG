@@ -34,5 +34,13 @@ checkMDFiles(post_files).forEach(file => {
   mdProcessor.processMarkdown(path.join(__dirname, 'src/posts/' + file));
 });
 
-
 console.timeEnd('Execution Time');
+
+if (process.argv.includes('--server')) {
+  const express = require('express');
+  const app = express();
+  app.use(express.static('predist'));
+  app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+  });
+}
