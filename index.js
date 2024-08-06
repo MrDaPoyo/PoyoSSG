@@ -15,8 +15,6 @@ fs.writeFileSync('posts.json', JSON.stringify(postArray));
 
 async function mergeEjsFiles() {
   const index_html = await ejs.renderFile('src/templates/index.ejs', { postArray: postArray, title: 'Index' });
-  console.log(index_html);
-  console.log(postArray);
   fs.writeFileSync('predist/index.html', index_html);
   fs.cpSync('src/templates/static/index.css', 'predist/index.css');
 };
@@ -34,13 +32,6 @@ function checkMDFiles(files) {
 mergeEjsFiles();
 checkMDFiles(post_files).forEach(file => {
   mdProcessor.processMarkdown(path.join(__dirname, 'src/posts/' + file));
-});
-
-const files = fs.readdirSync("src/posts").filter(file => path.extname(file) === '.md');
-
-files.forEach(file => {
-  console.log(`Processing ${file}`);
-  mdProcessor.processMarkdown(path.join("src/posts", file));
 });
 
 
