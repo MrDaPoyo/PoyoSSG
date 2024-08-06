@@ -25,11 +25,12 @@ const walk = async (dir) => {
               if (!--togo) resolve(results);
             });
           } 
-          else if (dir === 'posts') {
-            console.log(outputFilePath);
+          else if (dir === __dirname+'/src/posts') {
+            console.log('dir:', dir);
             fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), ejs.render('src/templates/post.ejs', { title: 'Hello', content: mdProcessor.readMarkdownFile(file).markdown()}));
           }
           else {
+            console.log(dir)
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
 
