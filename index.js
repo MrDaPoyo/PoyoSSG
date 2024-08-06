@@ -14,7 +14,7 @@ for (let file of post_files) {
 fs.writeFileSync('posts.json', JSON.stringify(postArray));
 
 async function mergeEjsFiles() {
-  const index_html = await ejs.renderFile('src/templates/index.ejs', { postArray, title: 'Index' });
+  const index_html = await ejs.renderFile('src/templates/index.ejs', { postArray: postArray, title: 'Index' });
   console.log(index_html);
   console.log(postArray);
   fs.writeFileSync('predist/index.html', index_html);
