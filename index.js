@@ -26,7 +26,6 @@ const walk = async (dir) => {
         const fileData = path.parse(file);
         let static = path.relative(fileData.dir, staticDir);
         static = static.replace('../', '');
-        console.log('Static:', static);
 
         fs.stat(file, async (err, stat) => {
           if (stat && stat.isDirectory()) {
@@ -36,13 +35,13 @@ const walk = async (dir) => {
             });
           }
           else if (dir === __dirname + postDir) {
-            console.log('Copying Post: ', dir);
+            // console.log('Copying Post: ', dir);
             postArray.push(mdProcessor.readMarkdownFile(file).metadata());
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
             fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
           }
           else if (file.split('.')[1] == 'md') {
-            console.log('Processing File:', file);
+            // console.log('Processing File:', file);
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
 
@@ -55,7 +54,7 @@ const walk = async (dir) => {
             fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
             if (!--togo) resolve(results);
           } else {
-            console.log('Copying File:', file);
+            // console.log('Copying File:', file);
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
             fs.copyFileSync(file, file.replace(srcDir, distDir));
           }
@@ -85,4 +84,21 @@ fs.mkdirSync(distDir, { recursive: true });
 fs.rmSync(distDir, { recursive: true });
 fs.mkdirSync(distDir, { recursive: true });
 run();
-console.log('Post Array:', postArray);
+
+if (process.argv[2] == '--server') {
+  const express = require('express');
+  const app = express();
+  const port = 3000;
+  app.use(express.static(distDir));
+  app.use(express.static("templates"));
+  app.get('/', (req,res) => {
+    res.sendFile(path.join('index.html'));
+  })
+  app.get('/posts/:post', (req,res) => {
+    console.log('Post:', req.params.post);
+    res.render("post.ejs", {content: mdProcessor.readMarkdownFile('src/posts').markdown()});
+  });
+  app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+  });
+}
