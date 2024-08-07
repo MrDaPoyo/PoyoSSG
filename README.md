@@ -14,9 +14,9 @@ taxonomies:
 Cookies are awesome things. I love cookies. They should be free for everyone. Cookies are incredibly cheap to make, and they are a great way to make people happy. So, why aren't cookies free for everyone? 
 ```
 
-Then, create a directory named `predist`. That's where the output of your website will be generated. after that, create another directory named `posts` inside `predist`. 
-
+Directories will be automatically generated. Just be sure to run PoyoSSG with sudo or admin privileges.
 Finally, run `node .` in the root directory and voilá! Your site has been generated.
+
 
 ## Templating
 PoyoSSG uses EJS for templating. The default code generates a landing page with all the posts and their author.
