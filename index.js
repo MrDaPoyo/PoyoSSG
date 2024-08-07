@@ -35,13 +35,13 @@ const walk = async (dir) => {
             });
           }
           else if (dir === __dirname + postDir) {
-            // console.log('Copying Post: ', dir);
+            console.log('Copying Post: ', dir);
             postArray.push(mdProcessor.readMarkdownFile(file).metadata());
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
             fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
           }
           else if (file.split('.')[1] == 'md') {
-            // console.log('Processing File:', file);
+            console.log('Processing File:', file);
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
 
@@ -54,7 +54,7 @@ const walk = async (dir) => {
             fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
             if (!--togo) resolve(results);
           } else {
-            // console.log('Copying File:', file);
+            console.log('Copying File:', file);
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
             fs.copyFileSync(file, file.replace(srcDir, distDir));
           }
