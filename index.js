@@ -5,8 +5,10 @@ const mdProcessor = require('./mdProcessor.js');
 const ejs = require('ejs');
 const { output } = require('marked/src/InlineLexer.js');
 
-const finalDir = 'dist';
+const distDir = 'dist';
 const staticDir = 'static'
+const srcDir = 'src';
+const postDir = '/src/posts';
 
 var postArray = [];
 
@@ -33,11 +35,11 @@ const walk = async (dir) => {
               if (!--togo) resolve(results);
             });
           }
-          else if (dir === __dirname + '/src/posts') {
+          else if (dir === __dirname + postDir) {
             console.log('Copying Post: ', dir);
             postArray.push(mdProcessor.readMarkdownFile(file).metadata());
-            fs.mkdirSync(file.replace('src', 'dist').replace(fileData.base, ''), { recursive: true });
-            fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown() }));
+            fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
+            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown() }));
           }
           else if (file.split('.')[1] == 'md') {
             console.log('Processing File:', file);
@@ -45,17 +47,17 @@ const walk = async (dir) => {
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
         
         
-            const outputFilePath = file.replace('src', finalDir).replace('.md', '.html');
+            const outputFilePath = file.replace(srcDir, distDir).replace('.md', '.html');
             const outputDir = path.dirname(outputFilePath);
         
             // Ensure the directory exists
             fs.mkdirSync(outputDir, { recursive: true });
-            fs.writeFileSync(file.replace('src', 'dist').replace('.md', '.html'), processed_file);
+            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), processed_file);
             if (!--togo) resolve(results);
           } else {
             console.log('Copying File:', file);
-            fs.mkdirSync(file.replace('src', 'dist').replace(fileData.base, ''), { recursive: true });
-            fs.copyFileSync(file, file.replace('src', 'dist'));
+            fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
+            fs.copyFileSync(file, file.replace(srcDir, distDir));
           }
           console.log('Post Array:', postArray);
           fs.writeFileSync('dist/index.html', await ejs.renderFile("templates/index.ejs", { postArray, title: "Index" }));
