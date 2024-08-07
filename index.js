@@ -45,11 +45,11 @@ const walk = async (dir) => {
             console.log('Processing File:', file);
             results.push(file);
             processed_file = mdProcessor.readMarkdownFile(file).markdown();
-        
-        
+
+
             const outputFilePath = file.replace(srcDir, distDir).replace('.md', '.html');
             const outputDir = path.dirname(outputFilePath);
-        
+
             // Ensure the directory exists
             fs.mkdirSync(outputDir, { recursive: true });
             fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), processed_file);
@@ -69,14 +69,16 @@ const walk = async (dir) => {
 };
 
 
+function run() {
 
+  console.log('Reading files...');
+  walk("src").then(files => {
+    console.log('Files:', files);
+  })
+    .catch(err => {
+      console.error('Error:', err);
+    });
+  console.timeEnd('Execution Time');
+}
 
-console.log('Reading files...');
-walk("src").then(files => {
-  console.log('Files:', files);
-})
-  .catch(err => {
-    console.error('Error:', err);
-  });
-
-console.timeEnd('Execution Time');
+run();
