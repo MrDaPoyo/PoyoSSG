@@ -25,8 +25,8 @@ const walk = async (dir) => {
         file = path.resolve(dir, file);
         const fileData = path.parse(file);
         let static = path.relative(fileData.dir, staticDir);
-        static = static.replace(/\\/g, "/");
         static = static.replace('../', '');
+        console.log('Static:', static);
 
         fs.stat(file, async (err, stat) => {
           if (stat && stat.isDirectory()) {
@@ -39,7 +39,7 @@ const walk = async (dir) => {
             console.log('Copying Post: ', dir);
             postArray.push(mdProcessor.readMarkdownFile(file).metadata());
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
-            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown() }));
+            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
           }
           else if (file.split('.')[1] == 'md') {
             console.log('Processing File:', file);
@@ -52,15 +52,15 @@ const walk = async (dir) => {
 
             // Ensure the directory exists
             fs.mkdirSync(outputDir, { recursive: true });
-            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), processed_file);
+            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
             if (!--togo) resolve(results);
           } else {
             console.log('Copying File:', file);
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
             fs.copyFileSync(file, file.replace(srcDir, distDir));
           }
-          console.log('Post Array:', postArray);
-          fs.writeFileSync('dist/index.html', await ejs.renderFile("templates/index.ejs", { postArray, title: "Index" }));
+          
+          fs.writeFileSync('dist/index.html', await ejs.renderFile("templates/index.ejs", { postArray, title: "Index", static: staticDir }));
         });
       });
     });
@@ -81,4 +81,8 @@ function run() {
   console.timeEnd('Execution Time');
 }
 
+fs.mkdirSync(distDir, { recursive: true });
+fs.rmSync(distDir, { recursive: true });
+fs.mkdirSync(distDir, { recursive: true });
 run();
+console.log('Post Array:', postArray);
