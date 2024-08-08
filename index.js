@@ -38,7 +38,12 @@ const walk = async (dir) => {
             console.log('Copying Post: ', dir);
             postArray.push(mdProcessor.readMarkdownFile(file).metadata());
             fs.mkdirSync(file.replace(srcDir, distDir).replace(fileData.base, ''), { recursive: true });
-            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static }));
+            var postList = [];
+            postArray.forEach(post => {
+              postList.push({ title: post.title, dest: post.dest });
+            });
+            console.log(postList);
+            fs.writeFileSync(file.replace(srcDir, distDir).replace('.md', '.html'), await ejs.renderFile("templates/post.ejs", { title: mdProcessor.readMarkdownFile(file).metadata().title, content: mdProcessor.readMarkdownFile(file).markdown(), static: static, postList }));
           }
           else if (file.split('.')[1] == 'md') {
             console.log('Processing File:', file);

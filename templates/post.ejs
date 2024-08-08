@@ -1,5 +1,17 @@
 <%- include('header', { title: title }) %>
-<div class="container">
-    <%- content %>
+<div class="row h-100">
+    <div class="sidebar">
+        <li>
+            <% for (let post of postList) { %>
+        <ul><a href="<%- post.dest %>"><%- post.title %></a></ul>
+        <% } %>
+        </li>
+    </div>
+        <div class="container">
+            <%- content %>
+        </div>
+    
+    </div>
 </div>
+
 <%- include('footer') %>
