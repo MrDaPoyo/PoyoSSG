@@ -1,11 +1,12 @@
 <%- include('header', { title: title }) %>
 <div class="row h-100">
-    <div class="sidebar">
-        <li>
+    <div class="sidebar post-list">
+        <h1>More Posts</h1>
+        <ul>
             <% for (let post of postList) { %>
-        <ul><a href="<%- post.dest %>"><%- post.title %></a></ul>
+        <li><a href="<%- post.dest %>"><%- post.title %></a></li>
         <% } %>
-        </li>
+        </ul>
     </div>
         <div class="container">
             <%- content %>
